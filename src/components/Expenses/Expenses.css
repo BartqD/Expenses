@@ -5,3 +5,10 @@
     width: 50rem;
     max-width: 95%;
   }
+ 
+  .expenses p{
+    text-align: center;
+    font-weight: bold;
+    font-size: 1rem;
+    color:red;
+  }
