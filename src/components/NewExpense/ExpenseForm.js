@@ -1,33 +1,43 @@
-import React, { useState } from 'react'
-import './ExpenseForm.css'
+import React, { useState } from 'react';
+import './ExpenseForm.css';
 
-const ExpenseForm = (props) => {
-	const [enteredTitle, setEnteredTitle] = useState('')
-	const [enteredAmount, setEnteredAmount] = useState('')
-	const [enteredDate, setEnteredDate] = useState('')
+const ExpenseForm = props => {
+	const [enteredTitle, setEnteredTitle] = useState('');
+	const [enteredAmount, setEnteredAmount] = useState('');
+	const [enteredDate, setEnteredDate] = useState('');
+	const [isFormVisible, setIsFormVisible] = useState(true);
+
 	const titleChangeHandler = event => {
-		setEnteredTitle(event.target.value)
-	}
+		setEnteredTitle(event.target.value);
+	};
+
 	const amountChangeHandler = event => {
-		setEnteredAmount(event.target.value)
-	}
+		setEnteredAmount(event.target.value);
+	};
+
 	const dateChangeHandler = event => {
-		setEnteredDate(event.target.value)
-	}
+		setEnteredDate(event.target.value);
+	};
+
 	const submitHandler = e => {
-		e.preventDefault()
+		e.preventDefault();
 		const expenseData = {
 			title: enteredTitle,
-			amount: enteredAmount,
+			amount: +enteredAmount,
 			date: new Date(enteredDate),
-		}
-		props.onSaveExpenseData(expenseData)
-		setEnteredTitle('')
-		setEnteredAmount('')
-		setEnteredDate('')
-	}
+		};
+		props.onSaveExpenseData(expenseData);
+		setEnteredTitle('');
+		setEnteredAmount('');
+		setEnteredDate('');
+		toggleFormVisibility()
+	};
 
-	return (
+	const toggleFormVisibility = () => {
+		setIsFormVisible(prevIsFormVisible => !prevIsFormVisible);
+	};
+
+	let expensesForm = (
 		<form onSubmit={submitHandler}>
 			<div className='new-expense__controls'>
 				<div className='new-expense__control'>
@@ -44,20 +54,23 @@ const ExpenseForm = (props) => {
 				</div>
 			</div>
 			<div className='new-expense__actions'>
+				<button type='button' onClick={toggleFormVisibility}>
+					Cancel
+				</button>
 				<button type='submit'>Add Expense</button>
 			</div>
 		</form>
-	)
-}
-export default ExpenseForm
+	);
 
-// const [userInput, setUserInput] = useState({ enteredTitle: '', enteredAmount: '', enteredDate: '' })
+	if (!isFormVisible) {
+		expensesForm = (
+			<div className='new-expense__actions2'>
+				<button onClick={toggleFormVisibility}>Add New Expense</button>
+			</div>
+		);
+	}
 
-// const titleChangeHandler = e => {
-// 	setUserInput(prevState => {
-// 		return {
-// 			...prevState,
-// 			enteredTitle: e.target.value,
-// 		}
-// 	})
-// }
+	return expensesForm;
+};
+
+export default ExpenseForm;
